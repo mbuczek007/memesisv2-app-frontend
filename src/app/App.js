@@ -10,33 +10,36 @@ import Grid from '@material-ui/core/Grid';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import NotFound from './components/NotFound';
+import { SnackbarProvider } from 'notistack';
 
 const App = () => {
   return (
     <AppTheme>
       <HelmetProvider>
-        <RootElem>
-          <Header />
-          <StyledMuiContainer component='main'>
-            <Grid container>
-              <Switch>
-                <Route path='/' exact>
-                  <Entries status='accepted' />
-                </Route>
-                <Route path='/pending' exact>
-                  <Entries key='pending' status='pending' />
-                </Route>
-                <Route path='/add' exact>
-                  <AddEntry />
-                </Route>
-                <Route>
-                  <NotFound />
-                </Route>
-              </Switch>
-            </Grid>
-          </StyledMuiContainer>
-          <Footer />
-        </RootElem>
+        <SnackbarProvider>
+          <RootElem>
+            <Header />
+            <StyledMuiContainer component='main'>
+              <Grid container>
+                <Switch>
+                  <Route path='/' exact>
+                    <Entries status='accepted' />
+                  </Route>
+                  <Route path='/pending' exact>
+                    <Entries key='pending' status='pending' />
+                  </Route>
+                  <Route path='/add' exact>
+                    <AddEntry />
+                  </Route>
+                  <Route>
+                    <NotFound />
+                  </Route>
+                </Switch>
+              </Grid>
+            </StyledMuiContainer>
+            <Footer />
+          </RootElem>
+        </SnackbarProvider>
       </HelmetProvider>
     </AppTheme>
   );

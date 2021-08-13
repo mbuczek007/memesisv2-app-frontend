@@ -6,8 +6,12 @@ import Paper from '@material-ui/core/Paper';
 import PageTitle from './PageTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { useSnackbar } from 'notistack';
 
 const Entries = ({ status }) => {
+  const { enqueueSnackbar } = useSnackbar();
   const [entries, setEntries] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -34,6 +38,17 @@ const Entries = ({ status }) => {
     }
 
     return title;
+  };
+
+  const handleDeleteEntry = (entryId) => {
+    EntryDataService.deleteEntry(entryId)
+      .then((response) => {
+        setEntries(entries.filter((entry) => entry.entry_id !== entryId));
+        enqueueSnackbar(response.data.message, { variant: 'success' });
+      })
+      .catch((e) => {
+        enqueueSnackbar(e.response.data.message, { variant: 'error' });
+      });
   };
 
   return (
@@ -79,6 +94,14 @@ const Entries = ({ status }) => {
                       <strong>Created date: </strong>
                       {entry.created_date}
                     </p>
+                    <Button
+                      onClick={() => handleDeleteEntry(entry.entry_id)}
+                      variant='contained'
+                      color='secondary'
+                      startIcon={<DeleteIcon />}
+                    >
+                      Delete
+                    </Button>
                   </StyledMuiCard>
                 </ItemWrapper>
               ))}
