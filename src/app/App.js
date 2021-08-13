@@ -1,32 +1,55 @@
 import React from 'react';
-import { Global, css } from '@emotion/react';
+import styled from '@emotion/styled';
+import { HelmetProvider } from 'react-helmet-async';
+import { Route, Switch } from 'react-router-dom';
+import AppTheme from './theme/AppTheme';
 import Entries from './components/Entries';
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import NotFound from './components/NotFound';
 
 const App = () => {
   return (
-    <>
-      <Global
-        styles={css`
-          body {
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-              'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
-              'Helvetica Neue', sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-          }
-
-          code {
-            font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-              monospace;
-          }
-        `}
-      />
-      <div>
-        <Entries />
-      </div>
-    </>
+    <AppTheme>
+      <HelmetProvider>
+        <RootElem>
+          <Header />
+          <StyledMuiContainer component='main'>
+            <Grid container>
+              <Switch>
+                <Route path='/' exact>
+                  <Entries status='accepted' />
+                </Route>
+                <Route path='/pending' exact>
+                  <Entries key='pending' status='pending' />
+                </Route>
+                <Route>
+                  <NotFound />
+                </Route>
+              </Switch>
+            </Grid>
+          </StyledMuiContainer>
+          <Footer />
+        </RootElem>
+      </HelmetProvider>
+    </AppTheme>
   );
 };
+
+const RootElem = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+  background-color: #f3f3f3;
+`;
+
+const StyledMuiContainer = styled(Container)`
+  padding-top: ${({ theme }) => theme.spacing(8)}px;
+  padding-bottom: ${({ theme }) => theme.spacing(6)}px;
+  max-width: 750px;
+`;
 
 export default App;

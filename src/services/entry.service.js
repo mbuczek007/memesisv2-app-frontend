@@ -5,20 +5,16 @@ class EntryDataService {
     return http.post('/entries/add', data);
   }
 
-  getAllEntries() {
+  getAllEntries(status) {
+    if (status) {
+      return http.get(`/entries?status=${status}`);
+    }
+
     return http.get('/entries');
   }
 
   getEntryById(id) {
     return http.get(`/entries/${id}`);
-  }
-
-  getAllAcceptedEntries() {
-    return http.get('/entries?status=accepted');
-  }
-
-  getAllPendingEntries() {
-    return http.get('/entries?status=pending');
   }
 
   updateAcceptances(id, data) {
