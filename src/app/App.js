@@ -4,6 +4,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { Route, Switch } from 'react-router-dom';
 import AppTheme from './theme/AppTheme';
 import Entries from './components/Entries';
+import AddEntry from './components/AddEntry';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Header from './components/Header';
@@ -24,6 +25,9 @@ const App = () => {
                 </Route>
                 <Route path='/pending' exact>
                   <Entries key='pending' status='pending' />
+                </Route>
+                <Route path='/add' exact>
+                  <AddEntry />
                 </Route>
                 <Route>
                   <NotFound />
