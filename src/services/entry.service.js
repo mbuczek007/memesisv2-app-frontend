@@ -5,9 +5,11 @@ class EntryDataService {
     return http.post('/entries/add', data);
   }
 
-  getAllEntries(status) {
+  getAllEntries(status, page, size) {
+    const paginationParams = `&page=${page}&size=${size}`;
+
     if (status) {
-      return http.get(`/entries?status=${status}`);
+      return http.get(`/entries?status=${status + paginationParams}`);
     }
 
     return http.get('/entries');
@@ -17,8 +19,8 @@ class EntryDataService {
     return http.get(`/entries/${id}`);
   }
 
-  updateAcceptances(id, data) {
-    return http.put(`/entries/updateAcceptances/${id}`, data);
+  acceptEntry(id) {
+    return http.put(`/entries/accept/${id}`);
   }
 
   deleteEntry(id) {

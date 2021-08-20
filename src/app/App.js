@@ -25,7 +25,10 @@ const App = () => {
                   <Route path='/' exact>
                     <Entries status='accepted' />
                   </Route>
-                  <Route path='/pending' exact>
+                  <Route path='/page/:page'>
+                    <Entries status='accepted' />
+                  </Route>
+                  <Route path='/pending/:page?' exact>
                     <Entries key='pending' status='pending' />
                   </Route>
                   <Route path='/add' exact>

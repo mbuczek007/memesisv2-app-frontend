@@ -8,25 +8,39 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
+import SaveIcon from '@material-ui/icons/Save';
 import { useSnackbar } from 'notistack';
+import { useHistory, useParams } from 'react-router-dom';
+import Pagination from '@material-ui/lab/Pagination';
+import YouTube from 'react-youtube';
+import moment from 'moment';
+import 'moment/locale/pl';
 
 const Entries = ({ status }) => {
+  const itemsPerPage = 2;
+  let history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
-  const [entries, setEntries] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [entries, setEntries] = useState([]);
+  const [totalEntryPages, setTotalEntryPages] = useState(0);
+  const { page } = useParams();
+  const pageInt = page ? parseInt(page) : 1;
+  const [changeEntriesCount, setChangeEntriesCount] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
 
-    EntryDataService.getAllEntries(status)
+    EntryDataService.getAllEntries(status, pageInt - 1, itemsPerPage)
       .then((response) => {
-        setEntries(response.data);
+        setEntries(response.data.entries);
+        setTotalEntryPages(response.data.totalPages);
         setIsLoading(false);
       })
       .catch((e) => {
         setIsLoading(false);
+        setEntries([]);
       });
-  }, [status]);
+  }, [status, pageInt, changeEntriesCount]);
 
   const generatePageTitle = () => {
     let title = '';
@@ -43,12 +57,43 @@ const Entries = ({ status }) => {
   const handleDeleteEntry = (entryId) => {
     EntryDataService.deleteEntry(entryId)
       .then((response) => {
-        setEntries(entries.filter((entry) => entry.entry_id !== entryId));
+        setChangeEntriesCount(!changeEntriesCount);
         enqueueSnackbar(response.data.message, { variant: 'success' });
       })
       .catch((e) => {
         enqueueSnackbar(e.response.data.message, { variant: 'error' });
       });
+  };
+
+  const handleAcceptEntry = (entryId) => {
+    EntryDataService.acceptEntry(entryId)
+      .then((response) => {
+        setChangeEntriesCount(!changeEntriesCount);
+        enqueueSnackbar(response.data.message, { variant: 'success' });
+      })
+      .catch((e) => {
+        enqueueSnackbar(e.response.data.message, { variant: 'error' });
+      });
+  };
+
+  const handlePageChange = (event, value) => {
+    let pathname = '';
+
+    if (status === 'pending') {
+      pathname = `/${status}/${value}`;
+    } else if (status === 'accepted') {
+      pathname = `/page/${value}`;
+    }
+
+    history.push({ pathname });
+  };
+
+  const ytOpts = {
+    height: '100%',
+    width: '100%',
+    playerVars: {
+      autoplay: 0,
+    },
   };
 
   return (
@@ -86,14 +131,33 @@ const Entries = ({ status }) => {
                       <strong>Nick: </strong>
                       {entry.nick_name}
                     </p>
-                    <p>
-                      <strong>Source: </strong>
-                      {entry.source}
-                    </p>
+
+                    {entry.source_type === 'yt-video' ? (
+                      <VideoWrapper>
+                        <YouTube videoId={entry.source} opts={ytOpts} />
+                      </VideoWrapper>
+                    ) : (
+                      <p>
+                        <strong>Source: </strong>
+                        <img src={entry.source} alt={entry.title} />
+                      </p>
+                    )}
+
                     <p>
                       <strong>Created date: </strong>
-                      {entry.created_date}
+                      {moment(entry.created_date).fromNow()}
                     </p>
+                    {!entry.is_accepted && (
+                      <Button
+                        onClick={() => handleAcceptEntry(entry.entry_id)}
+                        variant='contained'
+                        color='primary'
+                        startIcon={<SaveIcon />}
+                      >
+                        Accept
+                      </Button>
+                    )}
+
                     <Button
                       onClick={() => handleDeleteEntry(entry.entry_id)}
                       variant='contained'
@@ -105,6 +169,14 @@ const Entries = ({ status }) => {
                   </StyledMuiCard>
                 </ItemWrapper>
               ))}
+              <Pagination
+                count={totalEntryPages}
+                page={pageInt}
+                color='primary'
+                shape='rounded'
+                variant='outlined'
+                onChange={handlePageChange}
+              />
             </>
           )}
         </>
@@ -133,6 +205,20 @@ const StyledMuiCard = styled(Paper)`
   img {
     width: 100%;
     height: auto;
+  }
+`;
+
+const VideoWrapper = styled.div`
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
 `;
 
