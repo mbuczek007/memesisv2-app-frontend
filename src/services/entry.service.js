@@ -23,6 +23,10 @@ class EntryDataService {
     return http.put(`/entries/accept/${id}`);
   }
 
+  rejectEntry(id) {
+    return http.put(`/entries/reject/${id}`);
+  }
+
   deleteEntry(id) {
     return http.delete(`/entries/delete/${id}`);
   }

@@ -8,20 +8,12 @@ const Footer = () => {
   return (
     <StyledFooter>
       <Typography variant='h6' align='center' gutterBottom>
-        Memesis
-      </Typography>
-      <Typography
-        variant='subtitle1'
-        align='center'
-        color='textSecondary'
-        component='p'
-      >
-        Something here to give the footer a purpose!
+        ewangelizatory.pl
       </Typography>
       <Typography variant='body2' color='textSecondary' align='center'>
         {'Copyright © '}
         <Link component={RouterLink} to='/' color='inherit'>
-          Memesis
+          ewangelizatory.pl
         </Link>{' '}
         {new Date().getFullYear()}
       </Typography>

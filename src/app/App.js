@@ -31,6 +31,9 @@ const App = () => {
                   <Route path='/pending/:page?' exact>
                     <Entries key='pending' status='pending' />
                   </Route>
+                  <Route path='/view/:viewEntryId'>
+                    <Entries key='view' />
+                  </Route>
                   <Route path='/add' exact>
                     <AddEntry />
                   </Route>
@@ -53,11 +56,10 @@ const RootElem = styled.div`
   flex-direction: column;
   min-height: 100vh;
   position: relative;
-  background-color: #f3f3f3;
 `;
 
 const StyledMuiContainer = styled(Container)`
-  padding-top: ${({ theme }) => theme.spacing(8)}px;
+  padding-top: ${({ theme }) => theme.spacing(14)}px;
   padding-bottom: ${({ theme }) => theme.spacing(6)}px;
   max-width: 750px;
 `;

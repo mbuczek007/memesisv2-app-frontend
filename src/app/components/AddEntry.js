@@ -8,7 +8,6 @@ import TextField from '@material-ui/core/TextField';
 import ButtonLoading from './ButtonLoading';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Alert from '@material-ui/lab/Alert';
 import { useForm } from 'react-hook-form';
 import EntryDataService from '../../services/entry.service';
 import { getVideoIdFromUrl } from '../utils/utils';
@@ -19,11 +18,30 @@ import Button from '@material-ui/core/Button';
 import YouTube from 'react-youtube';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { useSnackbar } from 'notistack';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const AddEntry = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('file');
   const [selectedImagePreview, setSelectedImagePreview] = useState([]);
+  const [text, setText] = useState(null);
+
+  const modules = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'blockquote'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      [
+        { align: '' },
+        { align: 'center' },
+        { align: 'right' },
+        { align: 'justify' },
+      ],
+      ['clean'],
+    ],
+  };
 
   const tabs = [
     {
@@ -45,6 +63,7 @@ const AddEntry = () => {
 
   const initialAdditionalSettings = {
     disableComments: false,
+    isPrivate: false,
     sourceType: activeTab,
     source: '',
   };
@@ -52,10 +71,6 @@ const AddEntry = () => {
   const [additionalSettings, setAdditionalSettings] = useState(
     initialAdditionalSettings
   );
-  const [resultStatus, setResultStatus] = useState({
-    message: null,
-    type: 'error',
-  });
 
   const {
     register,
@@ -70,29 +85,34 @@ const AddEntry = () => {
     setLoading(true);
     EntryDataService.createEntry({
       title: data.entryTitle,
-      description: data.entryDescription,
+      description: text,
       source: additionalSettings.source,
       source_info: data.entrySourceInfo,
       nick_name: data.entryNick,
       disable_comments: additionalSettings.disableComments,
+      is_private: additionalSettings.isPrivate,
       source_type: additionalSettings.sourceType,
     })
       .then((response) => {
         setLoading(false);
         reset();
         setAdditionalSettings(initialAdditionalSettings);
-        setResultStatus({
-          ...resultStatus,
-          message: 'Wpis został pomyślnie dodany',
-          type: 'success',
+        enqueueSnackbar(response.data.message, {
+          variant: 'success',
+          anchorOrigin: {
+            vertical: 'top',
+            horizontal: 'center',
+          },
         });
       })
       .catch((e) => {
         setLoading(false);
-        setResultStatus({
-          ...resultStatus,
-          message: e.response.data.message,
-          type: 'error',
+        enqueueSnackbar(e.response.data.message, {
+          variant: 'error',
+          anchorOrigin: {
+            vertical: 'top',
+            horizontal: 'center',
+          },
         });
       });
   };
@@ -142,6 +162,10 @@ const AddEntry = () => {
     };
   };
 
+  const handleChange = (value) => {
+    setText(value);
+  };
+
   return (
     <Grid item xs={12} sm={12} md={12}>
       <PageTitle title='Dodaj nowy wpis' />
@@ -149,15 +173,11 @@ const AddEntry = () => {
         <Typography align='center' component='h2' variant='h5' color='inherit'>
           Dodaj nowy
         </Typography>
-
-        {resultStatus.message && (
-          <Alert severity={resultStatus.type}>{resultStatus.message}</Alert>
-        )}
-
-        <Grid container spacing={3}>
-          <form onSubmit={handleSubmit(onSubmit)} encType='multipart/form-data'>
+        <form onSubmit={handleSubmit(onSubmit)} encType='multipart/form-data'>
+          <Grid container>
             <Grid item xs={12} sm={12}>
               <TextField
+                fullWidth
                 error={errors.entryTitle ? true : false}
                 id='entry-title'
                 label='Tytuł'
@@ -272,10 +292,10 @@ const AddEntry = () => {
               <InputWrapper>
                 <DebounceInput
                   autoFocus
+                  fullWidth
                   debounceTimeout={500}
                   element={TextField}
                   variant='outlined'
-                  fullWidth
                   type='url'
                   label='Link do video'
                   value={additionalSettings.source}
@@ -288,7 +308,7 @@ const AddEntry = () => {
               </InputWrapper>
             </TabPanel>
 
-            <Grid item xs={12} sm={12}>
+            {/* <Grid item xs={12} sm={12}>
               <TextField
                 id='entry-description'
                 label='Opis'
@@ -297,20 +317,13 @@ const AddEntry = () => {
                 variant='outlined'
                 {...register('entryDescription')}
               />
-            </Grid>
+            </Grid> */}
 
             <Grid item xs={12} sm={12}>
-              <TextField
-                id='entry-source-info'
-                label='Źródło'
-                rows={4}
-                variant='outlined'
-                {...register('entrySourceInfo', {
-                  maxLength: {
-                    value: 1000,
-                    message: 'Tytuł moze zawierać maksymalnie 1000 znaków',
-                  },
-                })}
+              <ReactQuill
+                value={text}
+                onChange={handleChange}
+                modules={modules}
               />
             </Grid>
 
@@ -336,6 +349,40 @@ const AddEntry = () => {
             </Grid>
 
             <Grid item xs={12} sm={12}>
+              <TextField
+                fullWidth
+                id='entry-source-info'
+                label='Źródło'
+                rows={4}
+                variant='outlined'
+                {...register('entrySourceInfo', {
+                  maxLength: {
+                    value: 1000,
+                    message: 'Tytuł moze zawierać maksymalnie 1000 znaków',
+                  },
+                })}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={12}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={additionalSettings.isPrivate}
+                    onChange={(e) => {
+                      setAdditionalSettings({
+                        ...additionalSettings,
+                        [e.target.name]: e.target.checked,
+                      });
+                    }}
+                    name='isPrivate'
+                  />
+                }
+                label='Prywatny'
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={12}>
               <FormControlLabel
                 control={
                   <Switch
@@ -356,8 +403,8 @@ const AddEntry = () => {
             <Grid item xs={12} md={3}>
               <ButtonLoading loading={loading} ctaText='Dodaj Wpis' />
             </Grid>
-          </form>
-        </Grid>
+          </Grid>
+        </form>
       </StyledPaper>
     </Grid>
   );
@@ -377,7 +424,13 @@ const TabPanel = ({ children, activeTab, value }) => {
 };
 
 const StyledPaper = styled(Paper)`
-  padding: 30px;
+  padding: 15px 20px 20px 20px;
+  margin-bottom: ${({ theme }) => theme.spacing(8)}px;
+  background-color: rgb(255, 255, 255);
+  color: rgb(33, 43, 54);
+  box-shadow: rgb(145 158 171 / 24%) 0px 0px 2px 0px,
+    rgb(145 158 171 / 24%) 0px 16px 32px -4px;
+  border-radius: 16px;
 `;
 
 const StyledTabs = styled(Tabs)`
