@@ -10,7 +10,7 @@ import Pagination from '@material-ui/lab/Pagination';
 import Entry from './Entry';
 
 const Entries = ({ status }) => {
-  const itemsPerPage = 2;
+  const itemsPerPage = 10;
   let history = useHistory();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -37,7 +37,6 @@ const Entries = ({ status }) => {
     } else {
       EntryDataService.getEntryById(viewEntryId)
         .then((response) => {
-          console.log(response.data);
           setEntries([response.data]);
           setIsLoading(false);
         })

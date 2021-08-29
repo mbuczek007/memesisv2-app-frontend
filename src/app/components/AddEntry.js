@@ -27,7 +27,6 @@ const AddEntry = () => {
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('file');
   const [selectedImagePreview, setSelectedImagePreview] = useState([]);
-  const [text, setText] = useState(null);
 
   const modules = {
     toolbar: [
@@ -47,21 +46,27 @@ const AddEntry = () => {
     {
       id: 0,
       type: 'file',
-      label: 'Z dysku',
+      label: 'Zdjęcie z dysku',
     },
     {
       id: 1,
+      type: 'text',
+      label: 'Tekst',
+    },
+    {
+      id: 2,
       type: 'url',
       label: 'Z adresu url',
     },
     {
-      id: 2,
+      id: 3,
       type: 'yt-video',
       label: 'Video z Youtube',
     },
   ];
 
   const initialAdditionalSettings = {
+    description: null,
     disableComments: false,
     isPrivate: false,
     sourceType: activeTab,
@@ -83,16 +88,23 @@ const AddEntry = () => {
 
   const onSubmit = (data) => {
     setLoading(true);
-    EntryDataService.createEntry({
-      title: data.entryTitle,
-      description: text,
-      source: additionalSettings.source,
-      source_info: data.entrySourceInfo,
-      nick_name: data.entryNick,
-      disable_comments: additionalSettings.disableComments,
-      is_private: additionalSettings.isPrivate,
-      source_type: additionalSettings.sourceType,
-    })
+
+    const formData = new FormData();
+    formData.append('title', data.entryTitle);
+
+    additionalSettings.description &&
+      formData.append('description', additionalSettings.description);
+
+    data.entrySourceInfo &&
+      formData.append('source_info', data.entrySourceInfo);
+
+    formData.append('source', additionalSettings.source);
+    formData.append('nick_name', data.entryNick);
+    formData.append('disable_comments', additionalSettings.disableComments);
+    formData.append('is_private', additionalSettings.isPrivate);
+    formData.append('source_type', additionalSettings.sourceType);
+
+    EntryDataService.createEntry(formData)
       .then((response) => {
         setLoading(false);
         reset();
@@ -100,20 +112,23 @@ const AddEntry = () => {
         enqueueSnackbar(response.data.message, {
           variant: 'success',
           anchorOrigin: {
-            vertical: 'top',
+            vertical: 'bottom',
             horizontal: 'center',
           },
         });
       })
       .catch((e) => {
         setLoading(false);
-        enqueueSnackbar(e.response.data.message, {
-          variant: 'error',
-          anchorOrigin: {
-            vertical: 'top',
-            horizontal: 'center',
-          },
-        });
+        enqueueSnackbar(
+          e.response.status !== 413 ? e.response.data.message : e.response.data,
+          {
+            variant: 'error',
+            anchorOrigin: {
+              vertical: 'bottom',
+              horizontal: 'center',
+            },
+          }
+        );
       });
   };
 
@@ -140,11 +155,9 @@ const AddEntry = () => {
     const file = e.target.files[0];
     const reader = new FileReader();
 
-    console.log(file);
-
     setAdditionalSettings({
       ...additionalSettings,
-      source: file.name,
+      source: file,
     });
 
     reader.onloadend = () => {
@@ -162,8 +175,11 @@ const AddEntry = () => {
     };
   };
 
-  const handleChange = (value) => {
-    setText(value);
+  const handleChangeDescription = (value) => {
+    setAdditionalSettings({
+      ...additionalSettings,
+      description: value,
+    });
   };
 
   return (
@@ -308,21 +324,10 @@ const AddEntry = () => {
               </InputWrapper>
             </TabPanel>
 
-            {/* <Grid item xs={12} sm={12}>
-              <TextField
-                id='entry-description'
-                label='Opis'
-                multiline
-                rows={4}
-                variant='outlined'
-                {...register('entryDescription')}
-              />
-            </Grid> */}
-
             <Grid item xs={12} sm={12}>
               <ReactQuill
-                value={text}
-                onChange={handleChange}
+                value={additionalSettings.description}
+                onChange={handleChangeDescription}
                 modules={modules}
               />
             </Grid>

@@ -33,7 +33,7 @@ const Rating = ({ ratingMode, votes, votesCount, ratedElemId }) => {
           enqueueSnackbar(response.data.message, {
             variant: 'success',
             anchorOrigin: {
-              vertical: 'top',
+              vertical: 'bottom',
               horizontal: 'center',
             },
           });
@@ -43,7 +43,7 @@ const Rating = ({ ratingMode, votes, votesCount, ratedElemId }) => {
           enqueueSnackbar(e.response.data.message, {
             variant: 'error',
             anchorOrigin: {
-              vertical: 'top',
+              vertical: 'bottom',
               horizontal: 'center',
             },
           });
@@ -56,7 +56,7 @@ const Rating = ({ ratingMode, votes, votesCount, ratedElemId }) => {
           enqueueSnackbar(response.data.message, {
             variant: 'success',
             anchorOrigin: {
-              vertical: 'top',
+              vertical: 'bottom',
               horizontal: 'center',
             },
           });
@@ -66,7 +66,7 @@ const Rating = ({ ratingMode, votes, votesCount, ratedElemId }) => {
           enqueueSnackbar(e.response.data.message, {
             variant: 'error',
             anchorOrigin: {
-              vertical: 'top',
+              vertical: 'bottom',
               horizontal: 'center',
             },
           });

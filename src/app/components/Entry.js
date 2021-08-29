@@ -107,7 +107,7 @@ const Entry = ({
             </NickName>
             <StyledDate component='span' variant='body2'>
               <ScheduleIcon style={{ fontSize: 14 }} />
-              {moment(entry.created_date).fromNow()}
+              {moment(entry.createdAt).fromNow()}
             </StyledDate>
           </div>
           <div>
@@ -149,26 +149,27 @@ const Entry = ({
               <YouTube videoId={entry.source} opts={ytOpts} />
             </VideoWrapper>
           ) : (
-            <img src={entry.source} alt={entry.title} />
+            <>
+              {viewMode ? (
+                <img
+                  src={'http://localhost:8080/uploads/' + entry.source}
+                  alt={entry.title}
+                />
+              ) : (
+                <CardLink linked={!viewMode} entryId={entry.entry_id}>
+                  <img
+                    src={'http://localhost:8080/uploads/' + entry.source}
+                    alt={entry.title}
+                  />
+                </CardLink>
+              )}
+            </>
           )}
-
-          <EntryText>
-            <TypographyTitle variant='h5' component='h2'>
-              <CardLink linked={!viewMode} entryId={entry.entry_id}>
-                {entry.title}
-              </CardLink>
-            </TypographyTitle>
-          </EntryText>
-          <TypographySubtitle
-            variant='subtitle1'
-            component='h3'
-            dangerouslySetInnerHTML={{ __html: entry.description }}
-          />
         </div>
         <EntryFooter>
           <Rating ratedElemId={entry.entry_id} votesCount={entry.votes_count} />
           {!entry.disable_comments ? (
-            <Button onClick={!viewMode && toggleComments}>
+            <Button onClick={!viewMode ? toggleComments : null}>
               <StyledBadge
                 badgeContent={
                   entryCommentsCount === 0 ? '0' : entryCommentsCount
@@ -333,24 +334,11 @@ const NickName = styled(Typography)`
   font-weight: 700;
 `;
 
-const EntryText = styled.div`
-  text-align: center;
-`;
-
 const Source = styled(Typography)`
   text-align: center;
   font-size: 12px;
   color: #8e8e8e;
   margin-top: 5px;
-`;
-
-const TypographyTitle = styled(Typography)`
-  font-weight: 700;
-  padding: 15px 0 5px;
-`;
-
-const TypographySubtitle = styled(Typography)`
-  font-weight: 400;
 `;
 
 const StyledBadge = styled(Badge)`
