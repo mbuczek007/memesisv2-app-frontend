@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import EntryCommentDataService from '../../../services/entryComment.service';
-import ButtonLoading from '../ButtonLoading';
+import ButtonLoading from '../shared/ButtonLoading';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 

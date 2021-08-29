@@ -3,13 +3,13 @@ import styled from '@emotion/styled';
 import { HelmetProvider } from 'react-helmet-async';
 import { Route, Switch } from 'react-router-dom';
 import AppTheme from './theme/AppTheme';
-import Entries from './components/Entries';
-import AddEntry from './components/AddEntry';
+import Entries from './components/Entries/Entries';
+import AddEntry from './components/Entries/AddEntry';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import NotFound from './components/NotFound';
+import NotFound from './components/shared/NotFound';
 import { SnackbarProvider } from 'notistack';
 
 const App = () => {

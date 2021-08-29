@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
-import PageTitle from './PageTitle';
+import PageTitle from '../shared/PageTitle';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
-import ButtonLoading from './ButtonLoading';
+import ButtonLoading from '../shared/ButtonLoading';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { useForm } from 'react-hook-form';
-import EntryDataService from '../../services/entry.service';
-import { getVideoIdFromUrl } from '../utils/utils';
+import EntryDataService from '../../../services/entry.service';
+import { getVideoIdFromUrl } from '../../utils/utils';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { DebounceInput } from 'react-debounce-input';
@@ -292,7 +292,6 @@ const AddEntry = () => {
                   onChange={(e, type) => {
                     handleChangeMediaValue(e, type);
                   }}
-                  rows='4'
                   placeholder='http://www.adres.pl/nazwa-obrazka.jpg'
                 />
               </InputWrapper>
@@ -318,7 +317,6 @@ const AddEntry = () => {
                   onChange={(e, type) => {
                     handleChangeMediaValue(e, type);
                   }}
-                  rows='4'
                   placeholder='https://www.youtube.com/watch?v=bD6eaJFpW7Q'
                 />
               </InputWrapper>
@@ -329,6 +327,7 @@ const AddEntry = () => {
                 value={additionalSettings.description}
                 onChange={handleChangeDescription}
                 modules={modules}
+                placeholder='Opis..'
               />
             </Grid>
 

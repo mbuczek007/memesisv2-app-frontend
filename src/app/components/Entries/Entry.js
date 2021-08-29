@@ -6,8 +6,8 @@ import SaveIcon from '@material-ui/icons/Save';
 import YouTube from 'react-youtube';
 import moment from 'moment';
 import 'moment/locale/pl';
-import Rating from './Rating';
-import Comments from './Comments/Comments';
+import Rating from '../Rating';
+import Comments from '../Comments/Comments';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -16,13 +16,13 @@ import Dialog from '@material-ui/core/Dialog';
 import Slide from '@material-ui/core/Slide';
 import { useSnackbar } from 'notistack';
 import Paper from '@material-ui/core/Paper';
-import EntryDataService from '../../services/entry.service';
+import EntryDataService from '../../../services/entry.service';
 import Typography from '@material-ui/core/Typography';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import CardLink from './CardLink';
+import CardLink from '../shared/CardLink';
 import Badge from '@material-ui/core/Badge';
 import CommentIcon from '@material-ui/icons/Comment';
 import SpeakerNotesOffIcon from '@material-ui/icons/SpeakerNotesOff';
@@ -222,7 +222,7 @@ const Entry = ({
           onClose={toggleComments}
           TransitionComponent={CommentsTransition}
         >
-          <AppBar color='primary'>
+          <AppBar color='primary' elevation={0}>
             <Toolbar>
               <IconButton
                 edge='start'
@@ -305,6 +305,11 @@ const StyledDialog = styled(Dialog)`
 
   .MuiDialog-scrollPaper {
     justify-content: flex-end;
+  }
+
+  .MuiAppBar-root {
+    background-color: rgb(122, 79, 1);
+    color: #fff;
   }
 `;
 

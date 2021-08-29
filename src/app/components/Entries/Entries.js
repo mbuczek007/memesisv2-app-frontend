@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
-import EntryDataService from '../../services/entry.service';
+import EntryDataService from '../../../services/entry.service';
 import Grid from '@material-ui/core/Grid';
-import PageTitle from './PageTitle';
+import PageTitle from '../shared/PageTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import { useHistory, useParams } from 'react-router-dom';
