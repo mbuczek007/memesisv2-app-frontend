@@ -89,6 +89,10 @@ const Entry = ({
     setEntryCommentsCount(entryCommentsCount + 1);
   };
 
+  const getVideoIdFromSource = (source) => {
+    return source.split('-')[2];
+  };
+
   const ytOpts = {
     height: '100%',
     width: '100%',
@@ -143,29 +147,31 @@ const Entry = ({
             </Menu>
           </div>
         </EntryHeader>
-        <div>
-          {entry.source_type === 'yt-video' ? (
+        <ImageWrapper>
+          {entry.source_type === 'yt-video' && (
             <VideoWrapper>
-              <YouTube videoId={entry.source} opts={ytOpts} />
+              <YouTube
+                videoId={getVideoIdFromSource(entry.source)}
+                opts={ytOpts}
+              />
             </VideoWrapper>
-          ) : (
-            <>
-              {viewMode ? (
+          )}
+          <>
+            {viewMode ? (
+              <img
+                src={'http://localhost:8080/uploads/' + entry.source}
+                alt={entry.title}
+              />
+            ) : (
+              <CardLink linked={!viewMode} entryId={entry.entry_id}>
                 <img
                   src={'http://localhost:8080/uploads/' + entry.source}
                   alt={entry.title}
                 />
-              ) : (
-                <CardLink linked={!viewMode} entryId={entry.entry_id}>
-                  <img
-                    src={'http://localhost:8080/uploads/' + entry.source}
-                    alt={entry.title}
-                  />
-                </CardLink>
-              )}
-            </>
-          )}
-        </div>
+              </CardLink>
+            )}
+          </>
+        </ImageWrapper>
         <EntryFooter>
           <Rating ratedElemId={entry.entry_id} votesCount={entry.votes_count} />
           {!entry.disable_comments ? (
@@ -284,8 +290,11 @@ const StyledMuiCard = styled(Paper)`
 `;
 
 const VideoWrapper = styled.div`
-  position: relative;
-  padding-bottom: 56.25%;
+  position: absolute;
+  width: 90.6%;
+  top: 31px;
+  left: 31px;
+  padding-bottom: 68.5%;
   height: 0;
 
   iframe {
@@ -363,6 +372,10 @@ const StyledCommentIcon = styled(CommentIcon)`
 const StyledSpeakerNotesOffIcon = styled(SpeakerNotesOffIcon)`
   color: #637381;
   opacity: 0.6;
+`;
+
+const ImageWrapper = styled.div`
+  position: relative;
 `;
 
 export default Entry;
