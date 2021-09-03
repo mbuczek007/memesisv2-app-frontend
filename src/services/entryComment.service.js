@@ -1,8 +1,9 @@
 import http from '../http-common';
+import authHeader from './auth-header';
 
 class EntryCommentDataService {
   createComment(data) {
-    return http.post('/comments/add', data);
+    return http.post('/comments/add', data, { headers: authHeader() });
   }
 
   getEntryComments(entryId) {

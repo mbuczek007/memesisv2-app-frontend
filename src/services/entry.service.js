@@ -1,8 +1,9 @@
 import http from '../http-common';
+import authHeader from './auth-header';
 
 class EntryDataService {
   createEntry(data) {
-    return http.post('/entries/add', data);
+    return http.post('/entries/add', data, { headers: authHeader() });
   }
 
   getAllEntries(status, page, size) {
@@ -20,15 +21,15 @@ class EntryDataService {
   }
 
   acceptEntry(id) {
-    return http.put(`/entries/accept/${id}`);
+    return http.put(`/entries/accept/${id}`, {}, { headers: authHeader() });
   }
 
   rejectEntry(id) {
-    return http.put(`/entries/reject/${id}`);
+    return http.put(`/entries/reject/${id}`, {}, { headers: authHeader() });
   }
 
   deleteEntry(id) {
-    return http.delete(`/entries/delete/${id}`);
+    return http.delete(`/entries/delete/${id}`, { headers: authHeader() });
   }
 }
 
