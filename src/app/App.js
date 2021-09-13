@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
 import { HelmetProvider } from 'react-helmet-async';
 import { Route, Switch } from 'react-router-dom';
@@ -11,8 +11,17 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import NotFound from './components/shared/NotFound';
 import { SnackbarProvider } from 'notistack';
+import LoginPanel from './components/User/LoginPanel';
+import { checkAuth } from '../store/reducers/authSlice';
+import { useDispatch } from 'react-redux';
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(checkAuth());
+  }, [dispatch]);
+
   return (
     <AppTheme>
       <HelmetProvider>
@@ -33,6 +42,9 @@ const App = () => {
                   </Route>
                   <Route path='/view/:viewEntryId'>
                     <Entries key='view' />
+                  </Route>
+                  <Route path='/login' exact>
+                    <LoginPanel />
                   </Route>
                   <Route path='/add' exact>
                     <AddEntry />

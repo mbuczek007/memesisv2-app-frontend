@@ -6,6 +6,7 @@ import EntryCommentDataService from '../../../services/entryComment.service';
 import ButtonLoading from '../shared/ButtonLoading';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 
 const AddCommentForm = ({
   entryId,
@@ -13,6 +14,7 @@ const AddCommentForm = ({
   commentsReloading,
   handleCancelClick,
 }) => {
+  const { isLoggedIn, user } = useSelector((state) => state.auth);
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -32,7 +34,7 @@ const AddCommentForm = ({
       comment: data.entryComment,
       entry_id: entryId,
       parent_comment_id: parentCommentId,
-      nick_name: data.entryCommentNick,
+      user_id: user.id,
     })
       .then((response) => {
         setIsLoading(false);
@@ -58,6 +60,10 @@ const AddCommentForm = ({
       });
   };
 
+  if (!isLoggedIn) {
+    return <p>Zaloguj się aby dodawać komentarze.</p>;
+  }
+
   return (
     <AddCommentWrapper>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -79,28 +85,6 @@ const AddCommentForm = ({
             maxLength: {
               value: 6000,
               message: 'Komentarz moze zawierać maksymalnie 6000 znaków',
-            },
-          })}
-        />
-        <TextField
-          id='entry-comment-nick'
-          label='Nick'
-          fullWidth
-          rows={4}
-          error={errors.entryCommentNick ? true : false}
-          helperText={
-            errors.entryCommentNick && errors.entryCommentNick.message
-          }
-          variant='outlined'
-          {...register('entryCommentNick', {
-            required: 'To pole jest wymagane',
-            minLength: {
-              value: 3,
-              message: 'Nick powinien mieć minimum 2 znaki',
-            },
-            maxLength: {
-              value: 30,
-              message: 'Nick moze zawierać maksymalnie 30 znaków',
             },
           })}
         />

@@ -107,7 +107,7 @@ const Entry = ({
         <EntryHeader>
           <div>
             <NickName variant='subtitle2' gutterBottom>
-              {entry.nick_name}
+              {entry.user_name ? entry.user_name : 'Uzytkownik usunięty'}
             </NickName>
             <StyledDate component='span' variant='body2'>
               <ScheduleIcon style={{ fontSize: 14 }} />

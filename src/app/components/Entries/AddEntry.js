@@ -21,9 +21,11 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { useSnackbar } from 'notistack';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { useSelector } from 'react-redux';
 
 const AddEntry = () => {
   const { enqueueSnackbar } = useSnackbar();
+  const { isLoggedIn, user } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('file');
   const [selectedImagePreview, setSelectedImagePreview] = useState([]);
@@ -99,10 +101,10 @@ const AddEntry = () => {
       formData.append('source_info', data.entrySourceInfo);
 
     formData.append('source', additionalSettings.source);
-    formData.append('nick_name', data.entryNick);
     formData.append('disable_comments', additionalSettings.disableComments);
     formData.append('is_private', additionalSettings.isPrivate);
     formData.append('source_type', additionalSettings.sourceType);
+    formData.append('user_id', user.id);
 
     EntryDataService.createEntry(formData)
       .then((response) => {
@@ -181,6 +183,23 @@ const AddEntry = () => {
       description: value,
     });
   };
+
+  if (!isLoggedIn) {
+    return (
+      <Grid item xs={12} sm={12} md={12}>
+        <PageTitle title='Dodaj nowy wpis' />
+        <Typography
+          variant='h5'
+          align='center'
+          color='textSecondary'
+          component='p'
+        >
+          Dodawanie motywatorów mozliwe jest tylko dla zalogowanych
+          uzytkowników.
+        </Typography>
+      </Grid>
+    );
+  }
 
   return (
     <Grid item xs={12} sm={12} md={12}>
@@ -330,28 +349,6 @@ const AddEntry = () => {
                 placeholder='Opis..'
               />
             </Grid>
-
-            <Grid item xs={12} sm={12}>
-              <TextField
-                error={errors.entryNick ? true : false}
-                id='entry-nick'
-                label='Nick'
-                helperText={errors.entryNick && errors.entryNick.message}
-                variant='outlined'
-                {...register('entryNick', {
-                  required: 'To pole jest wymagane',
-                  minLength: {
-                    value: 3,
-                    message: 'Nick powinien zawierać minimum 3 znaki',
-                  },
-                  maxLength: {
-                    value: 50,
-                    message: 'Nick moze zawierać maksymalnie 50 znaków',
-                  },
-                })}
-              />
-            </Grid>
-
             <Grid item xs={12} sm={12}>
               <TextField
                 fullWidth

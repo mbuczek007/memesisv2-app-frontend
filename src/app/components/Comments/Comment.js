@@ -35,12 +35,12 @@ const Comment = ({ comment, commentsReloading, path }) => {
   return (
     <StyledListItem isfirstlevel={comment.parent_comment_id}>
       <ScrollCommentAnchor id={comment.entry_comment_id}></ScrollCommentAnchor>
-      <StyledAvatar>{comment.nick_name.charAt(0)}</StyledAvatar>
+      <StyledAvatar>{comment.user_name.charAt(0).toUpperCase()}</StyledAvatar>
       <ListItemText
         primary={
           <>
             <UserName component='span' variant='subtitle1'>
-              {comment.nick_name}
+              {comment.user_name}
             </UserName>
             <StyledDate component='span' variant='body2'>
               <ScheduleIcon style={{ fontSize: 12 }} />
