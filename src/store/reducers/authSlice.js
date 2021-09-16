@@ -45,10 +45,22 @@ export const logout = () => (dispatch) => {
   AuthService.logOut();
 };
 
+const checkAuthTimeout = (expirationTime) => (dispatch) => {
+  setTimeout(() => {
+    dispatch(logOutAction());
+  }, expirationTime * 1000);
+};
+
 export const checkAuth = () => (dispatch) => {
   const user = JSON.parse(localStorage.getItem('user'));
 
   if (!user) {
+    dispatch(logOutAction());
+
+    return null;
+  }
+
+  if (Math.floor(new Date().getTime() / 1000) > user.expirationTime) {
     dispatch(logOutAction());
   } else {
     dispatch(
@@ -56,6 +68,8 @@ export const checkAuth = () => (dispatch) => {
         user,
       })
     );
+
+    dispatch(checkAuthTimeout(3600));
   }
 };
 

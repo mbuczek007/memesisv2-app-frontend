@@ -6,10 +6,12 @@ import CommentVoteDataService from '../../services/commentVote.service';
 import { useSnackbar } from 'notistack';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
+import { useSelector } from 'react-redux';
 import { ReactComponent as HeartIcon } from '../../img/red-cross.svg';
 
 const Rating = ({ ratingMode, votes, votesCount, ratedElemId }) => {
   const { enqueueSnackbar } = useSnackbar();
+  const { user } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(false);
   const [loacalVotesCount, setLoacalVotesCount] = useState(votesCount);
   const [loacalVotes, setLoacalVotes] = useState(votes);
@@ -25,6 +27,7 @@ const Rating = ({ ratingMode, votes, votesCount, ratedElemId }) => {
       CommentVoteDataService.addVote({
         entry_comment_id: ratedElemId,
         vote_mode: mode,
+        user_id: user && user.id,
       })
         .then((response) => {
           setLoading(false);
