@@ -13,8 +13,10 @@ import ScheduleIcon from '@material-ui/icons/Schedule';
 import Link from '@material-ui/core/Link';
 import Avatar from '@material-ui/core/Avatar';
 import Rating from '../Rating';
+import { useSelector } from 'react-redux';
 
 const Comment = ({ comment, commentsReloading, path }) => {
+  const { isLoggedIn } = useSelector((state) => state.auth);
   const [replying, setReplying] = useContext(CommentContext);
   const [showReply, setShowReply] = useState(false);
 
@@ -84,7 +86,7 @@ const Comment = ({ comment, commentsReloading, path }) => {
         )}
 
         <>
-          {!compare(replying, path) ? (
+          {!compare(replying, path) && isLoggedIn && (
             <ActionLink
               component='button'
               variant='body2'
@@ -93,7 +95,9 @@ const Comment = ({ comment, commentsReloading, path }) => {
             >
               Odpowiedz
             </ActionLink>
-          ) : (
+          )}
+
+          {compare(replying, path) && (
             <AddCommentForm
               entryId={comment.entry_id}
               parentCommentId={comment.entry_comment_id}

@@ -14,6 +14,7 @@ import { SnackbarProvider } from 'notistack';
 import LoginPanel from './components/User/LoginPanel';
 import { checkAuth } from '../store/reducers/authSlice';
 import { useDispatch } from 'react-redux';
+import RegisterPanel from './components/User/RegisterPanel';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -45,6 +46,9 @@ const App = () => {
                   </Route>
                   <Route path='/login' exact>
                     <LoginPanel />
+                  </Route>
+                  <Route path='/signup' exact>
+                    <RegisterPanel />
                   </Route>
                   <Route path='/add' exact>
                     <AddEntry />

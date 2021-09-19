@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
-import { useDispatch } from 'react-redux';
 import ButtonLoading from '../shared/ButtonLoading';
 import { logIn } from '../../../store/reducers/authSlice';
 import Typography from '@material-ui/core/Typography';
@@ -9,31 +8,29 @@ import Grid from '@material-ui/core/Grid';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import FormControl from '@material-ui/core/FormControl';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
-import IconButton from '@material-ui/core/IconButton';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import styled from '@emotion/styled';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import Button from '@material-ui/core/Button';
 
 const LoginPanel = () => {
-  const { isLoggedIn } = useSelector((state) => state.auth);
-  const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const { enqueueSnackbar } = useSnackbar();
-  const dispatch = useDispatch();
-
   const {
     register,
     formState: { errors },
     handleSubmit,
     reset,
+    formState,
   } = useForm({
     mode: 'onChange',
   });
+  const { isLoggedIn } = useSelector((state) => state.auth);
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
+  const { isDirty, isValid } = formState;
 
   const onSubmit = (data) => {
     setLoading(true);
@@ -52,7 +49,6 @@ const LoginPanel = () => {
       })
       .catch((e) => {
         setLoading(false);
-        reset();
 
         enqueueSnackbar(e.response.data.message, {
           variant: 'error',
@@ -87,7 +83,7 @@ const LoginPanel = () => {
             required: 'To pole jest wymagane',
           })}
         />
-        <StyledFormControl
+        <FormControl
           variant='outlined'
           fullWidth
           margin='normal'
@@ -103,15 +99,15 @@ const LoginPanel = () => {
             })}
             endAdornment={
               <InputAdornment position='end'>
-                <IconButton
+                <Button
                   aria-label='toggle password visibility'
                   onClick={() => {
                     setShowPassword(!showPassword);
                   }}
                   edge='end'
                 >
-                  {showPassword ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
+                  {showPassword ? 'Ukryj' : 'Pokaz'}
+                </Button>
               </InputAdornment>
             }
             labelWidth={46}
@@ -119,24 +115,16 @@ const LoginPanel = () => {
           <FormHelperText error={errors.password ? true : false}>
             {errors.password && errors.password.message}
           </FormHelperText>
-        </StyledFormControl>
+        </FormControl>
 
-        <ButtonLoading loading={loading} ctaText='Zaloguj' />
+        <ButtonLoading
+          isDisabled={!isDirty || !isValid}
+          loading={loading}
+          ctaText='Zaloguj'
+        />
       </form>
     </Grid>
   );
 };
-
-const StyledFormControl = styled(FormControl)`
-  .MuiInputBase-root.Mui-focused .MuiOutlinedInput-notchedOutline,
-  .MuiOutlinedInput-notchedOutline {
-    ${({ isValid }) =>
-      isValid &&
-      `
-    border-color: green;
-
-  `}
-  }
-`;
 
 export default LoginPanel;

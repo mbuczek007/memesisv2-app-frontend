@@ -47,7 +47,7 @@ export const logout = () => (dispatch) => {
 
 const checkAuthTimeout = (expirationTime) => (dispatch) => {
   setTimeout(() => {
-    dispatch(logOutAction());
+    dispatch(logout());
   }, expirationTime * 1000);
 };
 
@@ -55,13 +55,13 @@ export const checkAuth = () => (dispatch) => {
   const user = JSON.parse(localStorage.getItem('user'));
 
   if (!user) {
-    dispatch(logOutAction());
+    dispatch(logout());
 
     return null;
   }
 
   if (Math.floor(new Date().getTime() / 1000) > user.expirationTime) {
-    dispatch(logOutAction());
+    dispatch(logout());
   } else {
     dispatch(
       logInAction({
