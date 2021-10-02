@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
-import IconButton from '@material-ui/core/IconButton';
+import IconButton from '@mui/material/IconButton';
 import EntryVoteDataService from '../../services/entryVote.service';
 import CommentVoteDataService from '../../services/commentVote.service';
 import { useSnackbar } from 'notistack';
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-import ThumbDownIcon from '@material-ui/icons/ThumbDown';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import { useSelector } from 'react-redux';
 import { ReactComponent as HeartIcon } from '../../img/red-cross.svg';
 

@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 import ButtonLoading from '../shared/ButtonLoading';
 import { logIn } from '../../../store/reducers/authSlice';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import FormControl from '@material-ui/core/FormControl';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
+import InputAdornment from '@mui/material/InputAdornment';
+import FormControl from '@mui/material/FormControl';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import FormHelperText from '@mui/material/FormHelperText';
 import { useSelector, useDispatch } from 'react-redux';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 
 const LoginPanel = () => {
   const {

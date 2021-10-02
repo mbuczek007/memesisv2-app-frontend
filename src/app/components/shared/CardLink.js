@@ -1,5 +1,5 @@
 import React from 'react';
-import Link from '@material-ui/core/Link';
+import Link from '@mui/material/Link';
 import styled from '@emotion/styled';
 import { Link as RouterLink } from 'react-router-dom';
 
@@ -16,7 +16,6 @@ const CardLInk = ({ children, linked, entryId }) => {
 };
 
 const StyledLink = styled(Link)`
-  color: #000;
   display: block;
 `;
 

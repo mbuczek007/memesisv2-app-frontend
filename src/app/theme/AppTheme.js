@@ -1,18 +1,22 @@
 import React from 'react';
-import { StylesProvider, MuiThemeProvider } from '@material-ui/core/styles';
-import { ThemeProvider } from '@emotion/react';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles';
+import { StylesProvider } from '@mui/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 import { theme } from './theme';
+import { Global, css } from '@emotion/react';
 
 const AppTheme = ({ children }) => {
   return (
     <StylesProvider injectFirst>
-      <MuiThemeProvider theme={theme}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          {children}
-        </ThemeProvider>
-      </MuiThemeProvider>
+      <ThemeProvider theme={theme}>
+        <Global
+          styles={css`
+            @import url('http://fonts.cdnfonts.com/css/signika');
+          `}
+        />
+        <CssBaseline />
+        {children}
+      </ThemeProvider>
     </StylesProvider>
   );
 };

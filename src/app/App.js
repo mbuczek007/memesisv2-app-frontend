@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
-import styled from '@emotion/styled';
 import { HelmetProvider } from 'react-helmet-async';
 import { Route, Switch } from 'react-router-dom';
 import AppTheme from './theme/AppTheme';
 import Entries from './components/Entries/Entries';
 import AddEntry from './components/Entries/AddEntry';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import NotFound from './components/shared/NotFound';
@@ -15,6 +14,9 @@ import LoginPanel from './components/User/LoginPanel';
 import { checkAuth } from '../store/reducers/authSlice';
 import { useDispatch } from 'react-redux';
 import RegisterPanel from './components/User/RegisterPanel';
+import Toolbar from '@mui/material/Toolbar';
+import styled from '@emotion/styled';
+import Stack from '@mui/material/Stack';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -27,9 +29,10 @@ const App = () => {
     <AppTheme>
       <HelmetProvider>
         <SnackbarProvider>
-          <RootElem>
+          <PageWrapper>
             <Header />
-            <StyledMuiContainer component='main'>
+            <Toolbar />
+            <MainContainer component='main' maxWidth={false}>
               <Grid container>
                 <Switch>
                   <Route path='/' exact>
@@ -58,26 +61,23 @@ const App = () => {
                   </Route>
                 </Switch>
               </Grid>
-            </StyledMuiContainer>
+            </MainContainer>
             <Footer />
-          </RootElem>
+          </PageWrapper>
         </SnackbarProvider>
       </HelmetProvider>
     </AppTheme>
   );
 };
 
-const RootElem = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  position: relative;
+const MainContainer = styled(Container)`
+  max-width: 750px;
+  margin-top: 55px;
+  margin-bottom: 60px;
 `;
 
-const StyledMuiContainer = styled(Container)`
-  padding-top: ${({ theme }) => theme.spacing(14)}px;
-  padding-bottom: ${({ theme }) => theme.spacing(6)}px;
-  max-width: 750px;
+const PageWrapper = styled(Stack)`
+  min-height: 100vh;
 `;
 
 export default App;

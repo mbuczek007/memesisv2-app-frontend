@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
-import styled from '@emotion/styled';
 import { NavLink as RouterLink } from 'react-router-dom';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
-import IconButton from '@material-ui/core/IconButton';
-import Avatar from '@material-ui/core/Avatar';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Link from '@mui/material/Link';
+import IconButton from '@mui/material/IconButton';
+import Avatar from '@mui/material/Avatar';
+import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
 import { logout } from '../../store/reducers/authSlice';
 import { useSelector, useDispatch } from 'react-redux';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
+import styled from '@emotion/styled';
+import Stack from '@mui/material/Stack';
+import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { stringAvatar } from '../utils/utils';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -43,46 +46,46 @@ const Header = () => {
       path: '/pending',
       name: 'Oczekujące',
     },
-    {
-      id: 2,
-      path: '/add',
-      name: 'Dodaj',
-    },
   ];
 
   return (
-    <StyledMuiAppBar position='fixed'>
-      <StyledMuiToolbar>
-        <StyledPageTitle variant='h6' color='inherit' noWrap>
-          <Link component={RouterLink} to='/' color='primary'>
-            ewangelizatory.pl
-          </Link>
-        </StyledPageTitle>
-        <nav>
-          <ul>
-            {headerLinks.map((link) => (
-              <li key={link.id}>
-                <StyledLink
-                  component={RouterLink}
-                  to={link.path}
-                  variant='button'
-                  color='textPrimary'
-                  activeClassName='MuiLink-underlineAlways'
-                  exact
-                >
-                  {link.name}
-                </StyledLink>
-              </li>
-            ))}
-          </ul>
-        </nav>
-        <div>
+    <StyledAppBar>
+      <StyledToolbar>
+        <Stack direction='row' alignItems='center' spacing={9}>
+          <RouterLink to='/'>
+            <MainLogo src='img/logo.png' />
+          </RouterLink>
+          <StyledNav>
+            <ul>
+              {headerLinks.map((link) => (
+                <li key={link.id}>
+                  <StyledMenuLink
+                    component={RouterLink}
+                    to={link.path}
+                    activeClassName='active'
+                    exact
+                  >
+                    {link.name}
+                  </StyledMenuLink>
+                </li>
+              ))}
+            </ul>
+          </StyledNav>
+        </Stack>
+        <Stack direction='row' alignItems='center' spacing={3}>
+          <AddButton
+            startIcon={<FileUploadOutlinedIcon />}
+            component={RouterLink}
+            to='/add'
+            variant='contained'
+            size='small'
+          >
+            Dodaj
+          </AddButton>
           {!isLoggedIn ? (
-            <RouterLink to='/login'>
-              <Button variant='outlined' color='primary'>
-                Zaloguj
-              </Button>
-            </RouterLink>
+            <AccountIconButton component={RouterLink} to='/login'>
+              <AccountCircleIcon />
+            </AccountIconButton>
           ) : (
             <>
               <IconButton
@@ -92,7 +95,7 @@ const Header = () => {
                 onClick={handleMenu}
                 color='inherit'
               >
-                <Avatar>{user.username.charAt(0).toUpperCase()}</Avatar>
+                <Avatar {...stringAvatar(user.username)} />
               </IconButton>
               <Menu
                 id='menu-appbar'
@@ -114,68 +117,71 @@ const Header = () => {
               </Menu>
             </>
           )}
-        </div>
-      </StyledMuiToolbar>
-    </StyledMuiAppBar>
+        </Stack>
+      </StyledToolbar>
+    </StyledAppBar>
   );
 };
 
-const StyledMuiAppBar = styled(AppBar)`
+const StyledAppBar = styled(AppBar)`
+  background: linear-gradient(269.9deg, #caa034 0%, #d5b036 99.98%);
+  box-shadow: 0px 1px 2px -1px rgba(0, 0, 0, 0.1);
+`;
+
+const StyledToolbar = styled(Toolbar)`
   width: 100%;
-  box-shadow: none;
-  color: rgb(33, 43, 54);
-  backdrop-filter: blur(6px);
-  background-color: rgba(255, 255, 255, 0.72);
-  z-index: 1201;
-  border-bottom: 1px solid rgba(145, 158, 171, 0.24);
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const StyledNav = styled.nav`
+  margin-left: 80px;
 
   ul,
   li {
+    list-style: none;
     margin: 0;
     padding: 0;
-    list-style: none;
   }
 
   li {
     display: inline-block;
+    padding-right: 25px;
   }
 `;
 
-const StyledMuiToolbar = styled(Toolbar)`
-  flex-wrap: wrap;
-  justify-content: space-between;
+const StyledMenuLink = styled(Link)`
+  color: #fff;
+  font-weight: 300;
+  text-decoration: none;
+  font-size: 16px;
+  opacity: 0.7;
 
-  > * {
-    flex-basis: 33.333%;
-
-    &:nth-child(2) {
-      text-align: center;
-    }
-
-    &:nth-child(3) {
-      text-align: right;
-    }
+  &.active {
+    opacity: 1;
+    font-weight: 500;
   }
 `;
 
-const StyledPageTitle = styled(Typography)`
-  a {
-    font-weight: 700;
+const MainLogo = styled.img`
+  vertical-align: middle;
+  width: 100%;
+  height: auto;
+  max-width: 184px;
+`;
+
+const AccountIconButton = styled(IconButton)`
+  svg {
+    color: #fff;
   }
 `;
 
-const StyledLink = styled(Link)`
-  text-transform: none;
-  margin: ${({ theme }) => theme.spacing(1)}px
-    ${({ theme }) => theme.spacing(1.5)}px;
-
+const AddButton = styled(Button)`
   &,
-  &:hover {
-    text-decoration: none;
-  }
-
-  &.MuiLink-underlineAlways {
-    font-weight: 700;
+  &:hover,
+  &:focus {
+    background-color: #fff;
+    color: #d5b036;
   }
 `;
 

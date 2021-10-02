@@ -1,13 +1,13 @@
 import React, { useState, createContext, useEffect } from 'react';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 import AddCommentForm from './AddCommentForm';
 import Comment from './Comment';
 import EntryCommentDataService from '../../../services/entryComment.service';
-import styled from '@emotion/styled';
-import List from '@material-ui/core/List';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import List from '@mui/material/List';
+import CircularProgress from '@mui/material/CircularProgress';
 import BestComment from './BestComment';
+import styled from '@emotion/styled';
 
 export const CommentContext = createContext({});
 

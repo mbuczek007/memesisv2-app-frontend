@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import PageTitle from '../shared/PageTitle';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import TextField from '@mui/material/TextField';
 import ButtonLoading from '../shared/ButtonLoading';
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import { useForm } from 'react-hook-form';
 import EntryDataService from '../../../services/entry.service';
 import { getVideoIdFromUrl } from '../../utils/utils';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 import { DebounceInput } from 'react-debounce-input';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import YouTube from 'react-youtube';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useSnackbar } from 'notistack';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -204,7 +204,7 @@ const AddEntry = () => {
   return (
     <Grid item xs={12} sm={12} md={12}>
       <PageTitle title='Dodaj nowy wpis' />
-      <StyledPaper>
+      <Paper>
         <Typography align='center' component='h2' variant='h5' color='inherit'>
           Dodaj nowy
         </Typography>
@@ -232,7 +232,7 @@ const AddEntry = () => {
               />
             </Grid>
 
-            <StyledTabs
+            <Tabs
               centered
               value={activeTab}
               onChange={handleChangeType}
@@ -245,7 +245,7 @@ const AddEntry = () => {
                   {...additionalProps(tab.type)}
                 />
               ))}
-            </StyledTabs>
+            </Tabs>
             <TabPanel value='file' activeTab={activeTab}>
               {additionalSettings.source && selectedImagePreview.length ? (
                 <ImagePlaceholderWrapper href='#'>
@@ -406,7 +406,7 @@ const AddEntry = () => {
             </Grid>
           </Grid>
         </form>
-      </StyledPaper>
+      </Paper>
     </Grid>
   );
 };
@@ -423,20 +423,6 @@ const TabPanel = ({ children, activeTab, value }) => {
     </div>
   );
 };
-
-const StyledPaper = styled(Paper)`
-  padding: 15px 20px 20px 20px;
-  margin-bottom: ${({ theme }) => theme.spacing(8)}px;
-  background-color: rgb(255, 255, 255);
-  color: rgb(33, 43, 54);
-  box-shadow: rgb(145 158 171 / 24%) 0px 0px 2px 0px,
-    rgb(145 158 171 / 24%) 0px 16px 32px -4px;
-  border-radius: 16px;
-`;
-
-const StyledTabs = styled(Tabs)`
-  margin: 20px 0 25px;
-`;
 
 const HiddenInput = styled.input`
   display: none;

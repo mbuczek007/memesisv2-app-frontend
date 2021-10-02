@@ -1,7 +1,6 @@
 import React from 'react';
 import Comment from './Comment';
-import Typography from '@material-ui/core/Typography';
-import styled from '@emotion/styled';
+import Typography from '@mui/material/Typography';
 
 const BestComment = ({ comments, commentsReloading }) => {
   const pullBestComment = () => {
@@ -21,7 +20,7 @@ const BestComment = ({ comments, commentsReloading }) => {
   }
 
   return (
-    <BestCommentWrapper>
+    <div>
       <Typography variant='h6' gutterBottom component='h4'>
         Najlepszy Komentarz
       </Typography>
@@ -30,12 +29,8 @@ const BestComment = ({ comments, commentsReloading }) => {
         commentsReloading={commentsReloading}
         path={[...[], 999999]}
       />
-    </BestCommentWrapper>
+    </div>
   );
 };
-
-const BestCommentWrapper = styled.div`
-  margin-bottom: 20px;
-`;
 
 export default BestComment;

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import styled from '@emotion/styled';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 import EntryCommentDataService from '../../../services/entryComment.service';
 import ButtonLoading from '../shared/ButtonLoading';
 import { useSnackbar } from 'notistack';
@@ -65,7 +64,7 @@ const AddCommentForm = ({
   }
 
   return (
-    <AddCommentWrapper>
+    <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <TextField
           id='entry-comment'
@@ -88,8 +87,8 @@ const AddCommentForm = ({
             },
           })}
         />
-        <AddCommentActions>
-          <ButtonWrapper>
+        <div>
+          <div>
             <ButtonLoading
               ctaText='Wyślij'
               loading={isLoading}
@@ -100,38 +99,11 @@ const AddCommentForm = ({
                 Anuluj
               </Button>
             )}
-          </ButtonWrapper>
-        </AddCommentActions>
+          </div>
+        </div>
       </form>
-    </AddCommentWrapper>
+    </div>
   );
 };
-
-const AddCommentWrapper = styled.div`
-  margin-top: 15px;
-  margin-bottom: 15px;
-`;
-
-const AddCommentActions = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-top: 10px;
-  margin-bottom: 5px;
-  padding: 0 15px;
-`;
-
-const ButtonWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-
-  button {
-    margin: 0;
-  }
-
-  > button {
-    margin-left: 10px;
-  }
-`;
 
 export default AddCommentForm;

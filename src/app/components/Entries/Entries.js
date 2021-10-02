@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import styled from '@emotion/styled';
 import EntryDataService from '../../../services/entry.service';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import PageTitle from '../shared/PageTitle';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@mui/material/CircularProgress';
+import Typography from '@mui/material/Typography';
 import { useHistory, useParams } from 'react-router-dom';
-import Pagination from '@material-ui/lab/Pagination';
+import Pagination from '@mui/material/Pagination';
 import Entry from './Entry';
+import styled from '@emotion/styled';
 
 const Entries = ({ status }) => {
   const itemsPerPage = 10;
@@ -80,10 +80,10 @@ const Entries = ({ status }) => {
   return (
     <Grid item xs={12} sm={12} md={12}>
       {isLoading ? (
-        <LoaderWrapper>
+        <div>
           <PageTitle title='Ładowanie...' />
           <CircularProgress />
-        </LoaderWrapper>
+        </div>
       ) : (
         <>
           <PageTitle title={generatePageTitle()} />

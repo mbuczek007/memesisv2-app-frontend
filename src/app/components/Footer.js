@@ -1,13 +1,13 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
+import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from '@emotion/styled';
 
 const Footer = () => {
   return (
-    <StyledFooter>
-      <Typography variant='h6' align='center' gutterBottom>
+    <Styledfooter>
+      <Typography variant='body1' align='center'>
         ewangelizatory.pl
       </Typography>
       <Typography variant='body2' color='textSecondary' align='center'>
@@ -17,14 +17,15 @@ const Footer = () => {
         </Link>{' '}
         {new Date().getFullYear()}
       </Typography>
-    </StyledFooter>
+    </Styledfooter>
   );
 };
 
-const StyledFooter = styled.footer`
-  background-color: ${({ theme }) => theme.palette.background.paper};
-  padding: ${({ theme }) => theme.spacing(6)}px;
+const Styledfooter = styled.footer`
   margin-top: auto;
+  padding: 24px 16px;
+  background-color: #fff;
+  border-top: 1px solid #f3f3f3;
 `;
 
 export default Footer;
