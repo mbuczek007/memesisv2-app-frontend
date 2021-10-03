@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import ButtonLoading from '../shared/ButtonLoading';
 import { logIn } from '../../../store/reducers/authSlice';
 import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -12,8 +10,9 @@ import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import FormHelperText from '@mui/material/FormHelperText';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Button from '@mui/material/Button';
+import PageTitle from '../shared/PageTitle';
 
 const LoginPanel = () => {
   const {
@@ -25,7 +24,6 @@ const LoginPanel = () => {
   } = useForm({
     mode: 'onChange',
   });
-  const { isLoggedIn } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -60,12 +58,9 @@ const LoginPanel = () => {
       });
   };
 
-  if (isLoggedIn) {
-    return <Redirect to='/' />;
-  }
-
   return (
-    <Grid item xs={12} sm={12} md={12}>
+    <>
+      <PageTitle title='Logowanie' />
       <Typography variant='h6' component='h2'>
         Logowanie
       </Typography>
@@ -110,7 +105,7 @@ const LoginPanel = () => {
                 </Button>
               </InputAdornment>
             }
-            labelWidth={46}
+            label='Hasło'
           />
           <FormHelperText error={errors.password ? true : false}>
             {errors.password && errors.password.message}
@@ -123,7 +118,7 @@ const LoginPanel = () => {
           ctaText='Zaloguj'
         />
       </form>
-    </Grid>
+    </>
   );
 };
 

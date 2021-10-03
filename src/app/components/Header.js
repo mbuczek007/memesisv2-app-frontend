@@ -7,7 +7,10 @@ import IconButton from '@mui/material/IconButton';
 import Avatar from '@mui/material/Avatar';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import { logout } from '../../store/reducers/authSlice';
+import {
+  logout,
+  toggleAuthOverlayAction,
+} from '../../store/reducers/authSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from '@mui/material/Button';
 import styled from '@emotion/styled';
@@ -15,11 +18,13 @@ import Stack from '@mui/material/Stack';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { stringAvatar } from '../utils/utils';
+import AddEntryOverlay from './Entries/AddEntryOverlay';
 
 const Header = () => {
   const dispatch = useDispatch();
   const { isLoggedIn, user } = useSelector((state) => state.auth);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [addEntryOverlay, setAddEntryOverlay] = useState(false);
   const open = Boolean(anchorEl);
 
   const handleMenu = (event) => {
@@ -49,7 +54,7 @@ const Header = () => {
   ];
 
   return (
-    <StyledAppBar>
+    <StyledAppBar elevation={0}>
       <StyledToolbar>
         <Stack direction='row' alignItems='center' spacing={9}>
           <RouterLink to='/'>
@@ -74,16 +79,25 @@ const Header = () => {
         </Stack>
         <Stack direction='row' alignItems='center' spacing={3}>
           <AddButton
+            disableElevation
             startIcon={<FileUploadOutlinedIcon />}
-            component={RouterLink}
-            to='/add'
             variant='contained'
+            color='secondary'
             size='small'
+            onClick={() => {
+              isLoggedIn
+                ? setAddEntryOverlay(true)
+                : dispatch(toggleAuthOverlayAction());
+            }}
           >
             Dodaj
           </AddButton>
           {!isLoggedIn ? (
-            <AccountIconButton component={RouterLink} to='/login'>
+            <AccountIconButton
+              onClick={() => {
+                dispatch(toggleAuthOverlayAction());
+              }}
+            >
               <AccountCircleIcon />
             </AccountIconButton>
           ) : (
@@ -119,14 +133,17 @@ const Header = () => {
           )}
         </Stack>
       </StyledToolbar>
+      <AddEntryOverlay
+        open={addEntryOverlay}
+        handleSetOpen={() => {
+          setAddEntryOverlay(false);
+        }}
+      />
     </StyledAppBar>
   );
 };
 
-const StyledAppBar = styled(AppBar)`
-  background: linear-gradient(269.9deg, #caa034 0%, #d5b036 99.98%);
-  box-shadow: 0px 1px 2px -1px rgba(0, 0, 0, 0.1);
-`;
+const StyledAppBar = styled(AppBar)``;
 
 const StyledToolbar = styled(Toolbar)`
   width: 100%;
@@ -155,7 +172,7 @@ const StyledMenuLink = styled(Link)`
   font-weight: 300;
   text-decoration: none;
   font-size: 16px;
-  opacity: 0.7;
+  opacity: 0.8;
 
   &.active {
     opacity: 1;
@@ -177,12 +194,12 @@ const AccountIconButton = styled(IconButton)`
 `;
 
 const AddButton = styled(Button)`
-  &,
-  &:hover,
-  &:focus {
-    background-color: #fff;
-    color: #d5b036;
-  }
+  // &,
+  // &:hover,
+  // &:focus {
+  //   background-color: #fff;
+  //   color: #d5b036;
+  // }
 `;
 
 export default Header;

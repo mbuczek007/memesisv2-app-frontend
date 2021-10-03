@@ -10,7 +10,7 @@ import Entry from './Entry';
 import styled from '@emotion/styled';
 
 const Entries = ({ status }) => {
-  const itemsPerPage = 10;
+  const itemsPerPage = 4;
   let history = useHistory();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -80,10 +80,10 @@ const Entries = ({ status }) => {
   return (
     <Grid item xs={12} sm={12} md={12}>
       {isLoading ? (
-        <div>
+        <LoaderWrapper>
           <PageTitle title='Ładowanie...' />
           <CircularProgress />
-        </div>
+        </LoaderWrapper>
       ) : (
         <>
           <PageTitle title={generatePageTitle()} />

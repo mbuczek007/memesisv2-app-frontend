@@ -11,7 +11,7 @@ const ButtonLoading = ({ loading, ctaText, isDisabled }) => {
         size='large'
         fullWidth
         variant='contained'
-        color='primary'
+        color='secondary'
         disabled={loading || isDisabled}
       >
         {ctaText}

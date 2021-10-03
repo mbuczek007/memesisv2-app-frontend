@@ -4,25 +4,31 @@ import AuthService from '../../services/auth.service';
 const user = JSON.parse(localStorage.getItem('user'));
 
 const initialAuthState = user
-  ? { isLoggedIn: true, user }
-  : { isLoggedIn: false, user: null };
+  ? { authOverlayOpen: false, isLoggedIn: true, user }
+  : { authOverlayOpen: false, isLoggedIn: false, user: null };
 
 export const slice = createSlice({
   name: 'auth',
   initialState: initialAuthState,
   reducers: {
     logInAction: (state, action) => {
+      state.authOverlayOpen = false;
       state.isLoggedIn = true;
       state.user = action.payload.user;
     },
     logOutAction: (state) => {
+      state.authOverlayOpen = false;
       state.isLoggedIn = false;
       state.user = null;
+    },
+    toggleAuthOverlayAction: (state) => {
+      state.authOverlayOpen = !state.authOverlayOpen;
     },
   },
 });
 
-export const { logInAction, logOutAction } = slice.actions;
+export const { logInAction, logOutAction, toggleAuthOverlayAction } =
+  slice.actions;
 
 export const logIn = (name, password) => (dispatch) => {
   return AuthService.login({ name, password })

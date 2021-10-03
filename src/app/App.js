@@ -10,13 +10,12 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import NotFound from './components/shared/NotFound';
 import { SnackbarProvider } from 'notistack';
-import LoginPanel from './components/User/LoginPanel';
 import { checkAuth } from '../store/reducers/authSlice';
 import { useDispatch } from 'react-redux';
-import RegisterPanel from './components/User/RegisterPanel';
 import Toolbar from '@mui/material/Toolbar';
 import styled from '@emotion/styled';
 import Stack from '@mui/material/Stack';
+import AuthOverlay from './components/User/AuthOverlay';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -47,12 +46,6 @@ const App = () => {
                   <Route path='/view/:viewEntryId'>
                     <Entries key='view' />
                   </Route>
-                  <Route path='/login' exact>
-                    <LoginPanel />
-                  </Route>
-                  <Route path='/signup' exact>
-                    <RegisterPanel />
-                  </Route>
                   <Route path='/add' exact>
                     <AddEntry />
                   </Route>
@@ -63,6 +56,7 @@ const App = () => {
               </Grid>
             </MainContainer>
             <Footer />
+            <AuthOverlay />
           </PageWrapper>
         </SnackbarProvider>
       </HelmetProvider>

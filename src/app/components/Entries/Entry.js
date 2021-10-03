@@ -23,9 +23,11 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CardLink from '../shared/CardLink';
-import Badge from '@mui/material/Badge';
+import Avatar from '@mui/material/Avatar';
 import CommentIcon from '@mui/icons-material/Comment';
 import SpeakerNotesOffIcon from '@mui/icons-material/SpeakerNotesOff';
+import Stack from '@mui/material/Stack';
+import { stringAvatar } from '../../utils/utils';
 
 const CommentsTransition = forwardRef(function Transition(props, ref) {
   return <Slide direction='left' ref={ref} {...props} />;
@@ -104,15 +106,28 @@ const Entry = ({
   return (
     <>
       <StyledMuiCard>
-        <EntryHeader>
+        <EntryContent
+          direction='row'
+          justifyContent='space-between'
+          alignItems='flex-start'
+        >
           <div>
-            <NickName variant='subtitle2' gutterBottom>
-              {entry.user_name ? entry.user_name : 'Uzytkownik usunięty'}
-            </NickName>
-            <StyledDate component='span' variant='body2'>
-              <ScheduleIcon style={{ fontSize: 14 }} />
-              {moment(entry.createdAt).fromNow()}
-            </StyledDate>
+            <Stack direction='row' alignItems='center' spacing={1}>
+              <Avatar
+                {...stringAvatar(
+                  entry.user_name ? entry.user_name : 'Uzytkownik usunięty'
+                )}
+              />
+              <div>
+                <NickName variant='body2'>
+                  {entry.user_name ? entry.user_name : 'Uzytkownik usunięty'}
+                </NickName>
+                <StyledDate component='span' variant='body2'>
+                  <ScheduleIcon style={{ fontSize: 12 }} />
+                  {moment(entry.createdAt).fromNow()}
+                </StyledDate>
+              </div>
+            </Stack>
           </div>
           <div>
             <IconButton
@@ -146,7 +161,7 @@ const Entry = ({
               ))}
             </Menu>
           </div>
-        </EntryHeader>
+        </EntryContent>
         <ImageWrapper>
           {entry.source_type === 'yt-video' && (
             <VideoWrapper>
@@ -172,30 +187,39 @@ const Entry = ({
             )}
           </>
         </ImageWrapper>
-        <EntryFooter>
-          <Rating ratedElemId={entry.entry_id} votesCount={entry.votes_count} />
-          {!entry.disable_comments ? (
-            <Button onClick={!viewMode ? toggleComments : null}>
-              <StyledBadge
-                badgeContent={
-                  entryCommentsCount === 0 ? '0' : entryCommentsCount
-                }
-                max={99}
-                color='primary'
-              >
-                <StyledCommentIcon fontSize='medium' />
-              </StyledBadge>
-            </Button>
-          ) : (
-            <Button>
-              <StyledSpeakerNotesOffIcon fontSize='medium' />
-            </Button>
-          )}
+        <EntryFooter
+          direction='row'
+          justifyContent='space-between'
+          alignItems='flex-start'
+        >
+          <Stack
+            direction='row'
+            justifyContent='flex-start'
+            alignItems='center'
+            spacing={1}
+          >
+            <Rating
+              ratedElemId={entry.entry_id}
+              votesCount={entry.votes_count}
+            />
+            {!entry.disable_comments ? (
+              <CommentButton onClick={!viewMode ? toggleComments : null}>
+                <CommentIcon fontSize='medium' />
+                <CommentsCount>
+                  {entryCommentsCount === 0 ? '0' : entryCommentsCount}
+                </CommentsCount>
+              </CommentButton>
+            ) : (
+              <Button>
+                <StyledSpeakerNotesOffIcon fontSize='medium' />
+              </Button>
+            )}
+          </Stack>
         </EntryFooter>
         {entry.source_info && (
           <Source variant='body1'>Źródło: {entry.source_info}</Source>
         )}
-        {!entry.is_accepted ? (
+        {/* {!entry.is_accepted ? (
           <Button
             onClick={() => handleAcceptEntry(entry.entry_id)}
             variant='contained'
@@ -221,14 +245,14 @@ const Entry = ({
           startIcon={<DeleteIcon />}
         >
           Delete
-        </Button>
+        </Button> */}
         <StyledDialog
           fullScreen
           open={openComments}
           onClose={toggleComments}
           TransitionComponent={CommentsTransition}
         >
-          <AppBar color='primary' elevation={0}>
+          <CommentsAppBar elevation={0}>
             <Toolbar>
               <IconButton
                 edge='start'
@@ -242,7 +266,8 @@ const Entry = ({
                 Komentarze ({entryCommentsCount})
               </Typography>
             </Toolbar>
-          </AppBar>
+          </CommentsAppBar>
+          <Toolbar />
           <CommentsWrapper>
             {!entry.disable_comments && (
               <Comments
@@ -270,18 +295,30 @@ const Entry = ({
   );
 };
 
-const CommentsWrapper = styled.div`
-  margin-top: 50px;
+const CommentsWrapper = styled.div``;
+
+const CommentsAppBar = styled(AppBar)`
+  &.MuiAppBar-root {
+    background: #fff;
+    color: #d5b036;
+    border-bottom: 2px solid #d5b036;
+  }
+`;
+
+const CommentsCount = styled.span`
+  font-size: 17px;
+  margin-left: 8px;
+`;
+
+const CommentButton = styled(Button)`
+  color: #a1a5ae;
 `;
 
 const StyledMuiCard = styled(Paper)`
-  padding: 15px 20px 20px 20px;
-  margin-bottom: ${({ theme }) => theme.spacing(8)}px;
-  background-color: rgb(255, 255, 255);
-  color: rgb(33, 43, 54);
-  box-shadow: rgb(145 158 171 / 24%) 0px 0px 2px 0px,
-    rgb(145 158 171 / 24%) 0px 16px 32px -4px;
-  border-radius: 16px;
+  padding: 25px 0 5px;
+  margin-bottom: ${({ theme }) => theme.spacing(8)};
+  background: #fff;
+  box-shadow: 0px 2px 6px -2px rgba(0, 0, 0, 0.1);
 
   img {
     width: 100%;
@@ -289,11 +326,20 @@ const StyledMuiCard = styled(Paper)`
   }
 `;
 
+const EntryContent = styled(Stack)`
+  margin: 0 30px;
+`;
+
+const EntryFooter = styled(EntryContent)`
+  padding: 20px 0;
+  border-top: 1px solid #f3f3f3;
+`;
+
 const VideoWrapper = styled.div`
   position: absolute;
-  width: 90.6%;
+  width: 91.5%;
   top: 31px;
-  left: 31px;
+  left: 30px;
   padding-bottom: 68.5%;
   height: 0;
 
@@ -323,25 +369,15 @@ const StyledDialog = styled(Dialog)`
 `;
 
 const StyledDate = styled(Typography)`
+  color: #9fa3ac;
+  display: block;
+  margin-top: -2px;
+
   svg {
     position: relative;
     top: 2px;
     margin-right: 4px;
   }
-`;
-
-const EntryHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-`;
-
-const EntryFooter = styled.div`
-  margin-top: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 `;
 
 const NickName = styled(Typography)`
@@ -353,20 +389,6 @@ const Source = styled(Typography)`
   font-size: 12px;
   color: #8e8e8e;
   margin-top: 5px;
-`;
-
-const StyledBadge = styled(Badge)`
-  .MuiBadge-badge {
-    top: 2px;
-    right: -1px;
-    padding: 0 4px;
-    font-weight: 700;
-  }
-`;
-
-const StyledCommentIcon = styled(CommentIcon)`
-  margin-left: 6px;
-  color: #637381;
 `;
 
 const StyledSpeakerNotesOffIcon = styled(SpeakerNotesOffIcon)`

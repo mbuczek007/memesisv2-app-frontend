@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
-import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
 import EntryVoteDataService from '../../services/entryVote.service';
 import CommentVoteDataService from '../../services/commentVote.service';
 import { useSnackbar } from 'notistack';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import { useSelector } from 'react-redux';
-import { ReactComponent as HeartIcon } from '../../img/red-cross.svg';
+import Stack from '@mui/material/Stack';
+import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 
 const Rating = ({ ratingMode, votes, votesCount, ratedElemId }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -94,12 +95,12 @@ const Rating = ({ ratingMode, votes, votesCount, ratedElemId }) => {
         {getCommentMode() ? (
           <ThumbUpIcon fontSize={'small'} />
         ) : (
-          <HeartIconWrapper>
-            <HeartIcon />
+          <>
+            <VolunteerActivismIcon fontSize='medium' />
             <VotesResult>
               {loacalVotesCount === 0 ? '0' : '+' + loacalVotesCount}
             </VotesResult>
-          </HeartIconWrapper>
+          </>
         )}
       </VotingIcon>
 
@@ -123,14 +124,8 @@ const VotesActtionPanel = styled.div`
   position: relative;
 `;
 
-const VotingIcon = styled(IconButton)`
-  padding: 0;
-
-  ${({ voteaction, theme }) =>
-    voteaction &&
-    `
-    color: ${voteaction === 'plus' ? `#4caf50` : theme.palette.secondary.main};
-  `}
+const VotingIcon = styled(Button)`
+  color: #a1a5ae;
 `;
 
 const VoteStatus = styled.div`
@@ -144,30 +139,9 @@ const VoteStatus = styled.div`
   }
 `;
 
-const HeartIconWrapper = styled.span`
-  display: flex;
-  align-items: center;
-
-  &:hover {
-    svg {
-      fill: #fda92d;
-      filter: drop-shadow(0px 0px 3px rgba(253, 169, 45, 0.3));
-    }
-  }
-
-  svg {
-    width: 26px;
-    height: 26px;
-    fill: red;
-    transition: fill 0.4s ease, filter 0.4s ease;
-  }
-`;
-
-const VotesResult = styled.div`
-  font-size: 14px;
-  color: #637381;
-  font-weight: 700;
-  margin-left: 10px;
+const VotesResult = styled.span`
+  font-size: 17px;
+  margin-left: 8px;
 `;
 
 export default Rating;

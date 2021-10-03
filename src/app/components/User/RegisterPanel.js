@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
-import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { useSelector, useDispatch } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import ButtonLoading from '../shared/ButtonLoading';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -19,6 +17,7 @@ import FormLabel from '@mui/material/FormLabel';
 import AuthService from '../../../services/auth.service';
 import { logIn } from '../../../store/reducers/authSlice';
 import Button from '@mui/material/Button';
+import PageTitle from '../shared/PageTitle';
 
 const RegisterPanel = () => {
   const {
@@ -31,7 +30,6 @@ const RegisterPanel = () => {
     mode: 'onChange',
   });
 
-  const { isLoggedIn } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -87,14 +85,11 @@ const RegisterPanel = () => {
       });
   };
 
-  if (isLoggedIn) {
-    return <Redirect to='/' />;
-  }
-
   return (
-    <Grid item xs={12} sm={12} md={12}>
+    <>
+      <PageTitle title='Rejestracja' />
       <Typography variant='h6' component='h2'>
-        Rejestracja
+        Zarejestruj się!
       </Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
         <TextField
@@ -185,13 +180,12 @@ const RegisterPanel = () => {
                 </Button>
               </InputAdornment>
             }
-            labelWidth={46}
+            label='Hasło'
           />
           <FormHelperText error={errors.password ? true : false}>
             {errors.password && errors.password.message}
           </FormHelperText>
         </FormControl>
-
         <FormControl component='fieldset'>
           <FormLabel component='legend'>Jestem</FormLabel>
           <RadioGroup
@@ -204,14 +198,13 @@ const RegisterPanel = () => {
             <FormControlLabel value='2' control={<Radio />} label='Męzczyzną' />
           </RadioGroup>
         </FormControl>
-
         <ButtonLoading
           isDisabled={!isDirty || !isValid}
           loading={loading}
           ctaText='Zarejestruj'
         />
       </form>
-    </Grid>
+    </>
   );
 };
 
