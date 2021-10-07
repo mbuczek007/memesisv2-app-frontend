@@ -174,13 +174,13 @@ const Entry = ({
           <>
             {viewMode ? (
               <img
-                src={'http://localhost:8080/uploads/' + entry.source}
+                src={process.env.REACT_APP_ENTRY_UPLOAD_PATH + entry.source}
                 alt={entry.title}
               />
             ) : (
               <CardLink linked={!viewMode} entryId={entry.entry_id}>
                 <img
-                  src={'http://localhost:8080/uploads/' + entry.source}
+                  src={process.env.REACT_APP_ENTRY_UPLOAD_PATH + entry.source}
                   alt={entry.title}
                 />
               </CardLink>
