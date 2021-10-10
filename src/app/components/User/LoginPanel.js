@@ -70,7 +70,7 @@ const LoginPanel = () => {
           margin='normal'
           fullWidth
           id='login'
-          label='Login'
+          label='Nazwa użytkownika lub adres e-mail'
           autoFocus
           error={errors.login ? true : false}
           helperText={errors.login && errors.login.message}
