@@ -78,20 +78,6 @@ const Header = () => {
           </StyledNav>
         </Stack>
         <Stack direction='row' alignItems='center' spacing={3}>
-          <AddButton
-            disableElevation
-            startIcon={<FileUploadOutlinedIcon />}
-            variant='contained'
-            color='secondary'
-            size='small'
-            onClick={() => {
-              isLoggedIn
-                ? setAddEntryOverlay(true)
-                : dispatch(toggleAuthOverlayAction());
-            }}
-          >
-            Dodaj
-          </AddButton>
           {!isLoggedIn ? (
             <AccountIconButton
               onClick={() => {
@@ -131,6 +117,20 @@ const Header = () => {
               </Menu>
             </>
           )}
+          <Button
+            disableElevation
+            startIcon={<FileUploadOutlinedIcon />}
+            variant='contained'
+            color='secondary'
+            size='small'
+            onClick={() => {
+              isLoggedIn
+                ? setAddEntryOverlay(true)
+                : dispatch(toggleAuthOverlayAction());
+            }}
+          >
+            Dodaj
+          </Button>
         </Stack>
       </StyledToolbar>
       <AddEntryOverlay
@@ -191,15 +191,6 @@ const AccountIconButton = styled(IconButton)`
   svg {
     color: #fff;
   }
-`;
-
-const AddButton = styled(Button)`
-  // &,
-  // &:hover,
-  // &:focus {
-  //   background-color: #fff;
-  //   color: #d5b036;
-  // }
 `;
 
 export default Header;
