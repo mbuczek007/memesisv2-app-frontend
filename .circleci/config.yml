@@ -19,3 +19,4 @@ workflows:
             branches:
               only:
                 - master
+                
