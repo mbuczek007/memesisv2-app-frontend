@@ -58,7 +58,7 @@ const Header = () => {
       <StyledToolbar>
         <Stack direction='row' alignItems='center' spacing={9}>
           <RouterLink to='/'>
-            <MainLogo src='img/logo.png' />
+            <MainLogo src='/img/logo.png' />
           </RouterLink>
           <StyledNav>
             <ul>
