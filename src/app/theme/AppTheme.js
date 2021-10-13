@@ -11,7 +11,7 @@ const AppTheme = ({ children }) => {
       <ThemeProvider theme={theme}>
         <Global
           styles={css`
-            @import url('http://fonts.cdnfonts.com/css/signika');
+            @import url('https://fonts.cdnfonts.com/css/signika');
           `}
         />
         <CssBaseline />
