@@ -171,8 +171,9 @@ const StyledMenuLink = styled(Link)`
   color: #fff;
   font-weight: 300;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 14px;
   opacity: 0.8;
+  text-transform: uppercase;
 
   &.active {
     opacity: 1;
