@@ -21,10 +21,11 @@ import { useSnackbar } from 'notistack';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useSelector } from 'react-redux';
+import Paper from '@mui/material/Paper';
 
 const AddEntry = () => {
   const { enqueueSnackbar } = useSnackbar();
-  const { user } = useSelector((state) => state.auth);
+  const { isLoggedIn, user } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('file');
   const [selectedImagePreview, setSelectedImagePreview] = useState([]);
@@ -183,8 +184,19 @@ const AddEntry = () => {
     });
   };
 
+  if (!isLoggedIn) {
+    return (
+      <>
+        <PageTitle title='Zaloguj się!' />
+        <Typography variant='h6' component='h2'>
+          Zaloguj się aby dodawać ewangelizatory
+        </Typography>
+      </>
+    );
+  }
+
   return (
-    <>
+    <StyledMuiCard>
       <PageTitle title='Dodaj nowy ewangelizator' />
       <Typography variant='h6' component='h2'>
         Dodaj nowy ewangelizator
@@ -383,7 +395,7 @@ const AddEntry = () => {
           </Grid>
         </Grid>
       </form>
-    </>
+    </StyledMuiCard>
   );
 };
 
@@ -448,6 +460,14 @@ const VideoPlaceholderWrapper = styled.div`
 
 const InfoText = styled(Typography)`
   margin-top: 10px;
+`;
+
+const StyledMuiCard = styled(Paper)`
+  padding: 25px 30px 5px;
+  margin-bottom: ${({ theme }) => theme.spacing(8)};
+  background: #fff;
+  box-shadow: rgb(145 158 171 / 24%) 0px 0px 2px 0px,
+    rgb(145 158 171 / 24%) 0px 16px 32px -4px;
 `;
 
 export default AddEntry;

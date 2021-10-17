@@ -18,13 +18,13 @@ import Stack from '@mui/material/Stack';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { stringAvatar } from '../utils/utils';
-import AddEntryOverlay from './Entries/AddEntryOverlay';
+import { useHistory } from 'react-router-dom';
 
 const Header = () => {
+  let history = useHistory();
   const dispatch = useDispatch();
   const { isLoggedIn, user } = useSelector((state) => state.auth);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [addEntryOverlay, setAddEntryOverlay] = useState(false);
   const open = Boolean(anchorEl);
 
   const handleMenu = (event) => {
@@ -125,7 +125,7 @@ const Header = () => {
             size='small'
             onClick={() => {
               isLoggedIn
-                ? setAddEntryOverlay(true)
+                ? history.push({ pathname: '/add' })
                 : dispatch(toggleAuthOverlayAction());
             }}
           >
@@ -133,12 +133,6 @@ const Header = () => {
           </Button>
         </Stack>
       </StyledToolbar>
-      <AddEntryOverlay
-        open={addEntryOverlay}
-        handleSetOpen={() => {
-          setAddEntryOverlay(false);
-        }}
-      />
     </StyledAppBar>
   );
 };
@@ -169,7 +163,7 @@ const StyledNav = styled.nav`
 
 const StyledMenuLink = styled(Link)`
   color: #fff;
-  font-weight: 300;
+  font-weight: 700;
   text-decoration: none;
   font-size: 14px;
   opacity: 0.8;
@@ -177,7 +171,6 @@ const StyledMenuLink = styled(Link)`
 
   &.active {
     opacity: 1;
-    font-weight: 500;
   }
 `;
 
