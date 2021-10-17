@@ -8,12 +8,7 @@ import moment from 'moment';
 import 'moment/locale/pl';
 import Rating from '../Rating';
 import Comments from '../Comments/Comments';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
-import Dialog from '@mui/material/Dialog';
-import Slide from '@mui/material/Slide';
 import { useSnackbar } from 'notistack';
 import Paper from '@mui/material/Paper';
 import EntryDataService from '../../../services/entry.service';
@@ -28,10 +23,8 @@ import CommentIcon from '@mui/icons-material/Comment';
 import SpeakerNotesOffIcon from '@mui/icons-material/SpeakerNotesOff';
 import Stack from '@mui/material/Stack';
 import { stringAvatar } from '../../utils/utils';
-
-const CommentsTransition = forwardRef(function Transition(props, ref) {
-  return <Slide direction='left' ref={ref} {...props} />;
-});
+import Link from '@mui/material/Link';
+import { HashLink as RouterLink } from 'react-router-hash-link';
 
 const options = ['Zgłoś'];
 
@@ -42,7 +35,6 @@ const Entry = ({
   changeEntriesCount,
 }) => {
   const { enqueueSnackbar } = useSnackbar();
-  const [openComments, setOpenComments] = useState(false);
   const [entryCommentsCount, setEntryCommentsCount] = useState(
     entry.comments_count
   );
@@ -81,10 +73,6 @@ const Entry = ({
       .catch((e) => {
         enqueueSnackbar(e.response.data.message, { variant: 'error' });
       });
-  };
-
-  const toggleComments = () => {
-    setOpenComments(!openComments);
   };
 
   const handleUpdateCommentCount = () => {
@@ -203,12 +191,16 @@ const Entry = ({
               votesCount={entry.votes_count}
             />
             {!entry.disable_comments ? (
-              <CommentButton onClick={!viewMode ? toggleComments : null}>
+              <CommentLink
+                underline='none'
+                component={RouterLink}
+                to={`/view/${entry.entry_id}#comments`}
+              >
                 <CommentIcon fontSize='medium' />
                 <CommentsCount>
                   {entryCommentsCount === 0 ? '0' : entryCommentsCount}
                 </CommentsCount>
-              </CommentButton>
+              </CommentLink>
             ) : (
               <Button>
                 <StyledSpeakerNotesOffIcon fontSize='medium' />
@@ -246,39 +238,6 @@ const Entry = ({
         >
           Delete
         </Button> */}
-        <StyledDialog
-          fullScreen
-          open={openComments}
-          onClose={toggleComments}
-          TransitionComponent={CommentsTransition}
-        >
-          <CommentsAppBar elevation={0}>
-            <Toolbar>
-              <IconButton
-                edge='start'
-                color='inherit'
-                onClick={toggleComments}
-                aria-label='close'
-              >
-                <ArrowBackIosIcon />
-              </IconButton>
-              <Typography variant='h6'>
-                Komentarze ({entryCommentsCount})
-              </Typography>
-            </Toolbar>
-          </CommentsAppBar>
-          <Toolbar />
-          <CommentsWrapper>
-            {!entry.disable_comments && (
-              <Comments
-                entryId={entry.entry_id}
-                commentsCount={entryCommentsCount}
-                hideHeading
-                updateCommentCount={handleUpdateCommentCount}
-              />
-            )}
-          </CommentsWrapper>
-        </StyledDialog>
       </StyledMuiCard>
       {viewMode && (
         <>
@@ -295,22 +254,14 @@ const Entry = ({
   );
 };
 
-const CommentsWrapper = styled.div``;
-
-const CommentsAppBar = styled(AppBar)`
-  &.MuiAppBar-root {
-    background: #fff;
-    color: #d5b036;
-    border-bottom: 2px solid #d5b036;
-  }
-`;
-
 const CommentsCount = styled.span`
   font-size: 17px;
   margin-left: 8px;
 `;
 
-const CommentButton = styled(Button)`
+const CommentLink = styled(Link)`
+  display: flex;
+  align-items: center;
   color: #a1a5ae;
 `;
 
@@ -318,7 +269,8 @@ const StyledMuiCard = styled(Paper)`
   padding: 25px 0 5px;
   margin-bottom: ${({ theme }) => theme.spacing(8)};
   background: #fff;
-  box-shadow: rgb(145 158 171 / 24%) 0px 0px 2px 0px, rgb(145 158 171 / 24%) 0px 16px 32px -4px;
+  box-shadow: rgb(145 158 171 / 24%) 0px 0px 2px 0px,
+    rgb(145 158 171 / 24%) 0px 16px 32px -4px;
 
   img {
     width: 100%;
@@ -349,22 +301,6 @@ const VideoWrapper = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-  }
-`;
-
-const StyledDialog = styled(Dialog)`
-  .MuiDialog-paperFullScreen,
-  .MuiAppBar-root {
-    width: 36vw;
-  }
-
-  .MuiDialog-scrollPaper {
-    justify-content: flex-end;
-  }
-
-  .MuiAppBar-root {
-    background-color: rgb(122, 79, 1);
-    color: #fff;
   }
 `;
 
