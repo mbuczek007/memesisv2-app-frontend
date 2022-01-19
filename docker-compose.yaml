@@ -1,0 +1,12 @@
+version: '4.4.3'
+
+services:
+  memesis-app-frontend-webapp:
+    container_name: memesis-app-frontend-webapp
+    build:
+      context: ./
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - 3000:3000
