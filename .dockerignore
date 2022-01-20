@@ -1,0 +1,11 @@
+.git
+node-modules-copy.sh
+Dockerfile
+docker-compose.yaml
+.DS_Store
+.gitignore
+*.md
+.circleci
+
+*.csv
+tmp
